@@ -111,6 +111,7 @@ pub fn get_joystick_state(devices: &Devices, id: usize) -> Option<JoystickState>
     }
 }
 
+
 /// Produces a Device struct containing ID's to all available raw input Devices
 pub fn produce_raw_device_list(incl_360_devices: bool) -> Devices {
     let mut device_list = Devices::new();

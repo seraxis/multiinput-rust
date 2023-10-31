@@ -111,6 +111,12 @@ impl From<JoystickInfo> for JoystickDisplayInfo {
     }
 }
 
+impl JoystickInfo{
+    fn handle(&self) -> HANDLE {
+        return self.handle.clone()
+    }
+}
+
 #[derive(Clone, Debug)]
 pub enum DeviceInfo {
     Mouse(MouseInfo),

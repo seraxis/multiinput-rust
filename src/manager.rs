@@ -15,7 +15,7 @@ use winapi::um::winuser::{
 
 use std::collections::VecDeque;
 use std::ffi::OsStr;
-use std::mem;
+use std::mem::{self, MaybeUninit};
 use std::os::windows::ffi::OsStrExt;
 use std::ptr;
 use std::thread;
@@ -35,6 +35,7 @@ enum Command {
     PrintDeviceList,
     GetDeviceList,
     GetDeviceStats,
+    GetDeviceNames,
 }
 
 /// Types of Raw Input Device
@@ -104,6 +105,9 @@ impl RawInputManager {
                     }
                     Ok(Command::UnfilterDevices) => {
                         devices.reset_device_map();
+                    }
+                    Ok(Command::GetDeviceNames) => {
+                        tx_joy.send(device_names(&devices)).unwrap();
                     }
                     Ok(Command::GetEvent) => {
                         if let Some(event) = get_event(&mut event_queue, &mut devices) {
@@ -185,6 +189,8 @@ impl RawInputManager {
             self.sender.send(Command::GetDeviceList).unwrap();
             self.device_info_receiver.recv().unwrap()
     }
+
+    pub fn get_device_names
 }
 
 impl Drop for RawInputManager {
@@ -275,4 +281,20 @@ fn get_device_stats(devices: &Devices) -> DeviceStats {
         number_of_keyboards: devices.keyboards.len(),
         number_of_joysticks: devices.joysticks.len(),
     }
+}
+
+/// See [microsoft docs](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/hidsdi/nf-hidsdi-hidd_getproductstring) for more information.
+// Why in the everloving duck would you have an API that just mutates data at a random address. "trust me bro"
+fn device_names(devices: &Devices) -> Vec<String> {
+    devices.device_map.iter().for_each(|(handle, _)| {
+        
+        // From docs: "If the buffer is not large enough to return the entire
+        // NULL-terminated embedded string, the routine returns nothing in the
+        // buffer. the suppplied buffer must be <= 4093"
+        let mut buffer: [u8; 4093] = MaybeUninit::zeroed();
+        let raw_mut_pointer = buffer.as_mut_ptr();
+
+    });
+
+    return vec!("test".to_string())
 }

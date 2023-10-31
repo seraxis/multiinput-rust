@@ -1,7 +1,7 @@
 use devices::{HatSwitch, JoystickInfo, JoystickState};
 use event::RawEvent;
 use std::mem::{transmute, MaybeUninit};
-use winapi::shared::hidpi::{
+use ::shared::hidpi::{
     HidP_GetUsageValue, HidP_GetUsages, HidP_Input, HIDP_STATUS_INCOMPATIBLE_REPORT_ID,
     HIDP_STATUS_SUCCESS, HIDP_STATUS_INVALID_REPORT_LENGTH, HIDP_STATUS_INVALID_REPORT_TYPE, PHIDP_PREPARSED_DATA,
     HIDP_STATUS_BUFFER_TOO_SMALL, HIDP_STATUS_INVALID_PREPARSED_DATA, HIDP_STATUS_USAGE_NOT_FOUND
